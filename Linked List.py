@@ -1,6 +1,5 @@
 class Node:
-    def __init__(self,prev=None, data=None, next=None):
-        self.prev = prev
+    def __init__(self, data=None, next=None):
         self.data = data
         self.next = next
 
@@ -15,7 +14,7 @@ class LinkedList:
         itr = self.head
         llstr = ''
         while itr:
-            llstr += str(itr.data)+' <--> ' if itr.next else str(itr.data)
+            llstr += str(itr.data)+' --> ' if itr.next else str(itr.data)
             itr = itr.next
         print(llstr)
 
@@ -29,15 +28,20 @@ class LinkedList:
         return count
 
     def insert_at_begining(self, data):
-        node = Node(None, data, self.head)
+        node = Node(data, self.head)
         self.head = node
 
     def insert_at_end(self, data):
         if self.head is None:
-            self.head = Node(None, data, None)
+            self.head = Node(data, None)
             return
 
-        self.tail = Node(self.tail.prev, data, None)
+        itr = self.head
+
+        while itr.next:
+            itr = itr.next
+
+        itr.next = Node(data, None)
 
     def insert_at(self, index, data):
         if index<0 or index>self.get_length():
@@ -51,9 +55,10 @@ class LinkedList:
         itr = self.head
         while itr:
             if count == index - 1:
-                node = Node(itr.prev, data, itr.next)
+                node = Node(data, itr.next)
                 itr.next = node
                 break
+
             itr = itr.next
             count += 1
 
@@ -70,7 +75,6 @@ class LinkedList:
         while itr:
             if count == index - 1:
                 itr.next = itr.next.next
-                itr.next.next.prev = itr.next
                 break
 
             itr = itr.next
@@ -81,45 +85,14 @@ class LinkedList:
         for data in data_list:
             self.insert_at_end(data)
 
-    def insert_after_value(self, data_after, data_to_insert):
-        itr = self.head
-        while itr:
-            if itr.data == data_after:
-                node = Node(data_to_insert, itr.next)
-                itr.next = node
-            itr = itr.next
-
-    def remove_by_value(self, data):
-        if self.head.data == data:
-            self.head = self.head.next
-            return
-
-        itr = self.head
-        while itr.next:
-            if itr.next.data == data:
-                itr.next = itr.next.next
-                break
-            itr = itr.next
-
-
-
-
-
-
-        
 
 if __name__ == '__main__':
     ll = LinkedList()
     ll.insert_values(["banana","mango","grapes","orange"])
+    ll.insert_at(1,"blueberry")
+    ll.remove_at(2)
     ll.print()
-    ll.insert_after_value("mango","apple") # insert apple after mango
-    ll.print()
-    ll.remove_by_value("orange") # remove orange from linked list
-    ll.print()
-    ll.remove_by_value("figs")
-    ll.print()
-    ll.remove_by_value("banana")
-    ll.remove_by_value("mango")
-    ll.remove_by_value("apple")
-    ll.remove_by_value("grapes")
+
+    ll.insert_values([45,7,12,567,99])
+    ll.insert_at_end(67)
     ll.print()
