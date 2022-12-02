@@ -1,7 +1,6 @@
 class TreeNode:
-    def __init__(self, name, designation) -> None:
+    def __init__(self, name) -> None:
         self.name = name
-        self.designation = designation
         self.child = []
         self.parent = None
 
@@ -19,47 +18,48 @@ class TreeNode:
 
         return level
     
-    def print_tree(self, method):
+    def print_tree(self, level):
         spaces = ' '*self.get_level()*3
         prefix = spaces + "|__" if self.parent else ""
-        if method == 'both':
-            print(f'{prefix + self.name} ({self.designation})')
-            if self.child:
-                for i in self.child:
-                    i.print_tree(method)
-        elif method == 'name':
+        if self.get_level() <= level:
             print(f'{prefix + self.name}')
-            if self.child:
-                for i in self.child:
-                    i.print_tree(method)
-        elif method == 'designation':
-            print(f'{prefix + self.designation}')
-            if self.child:
-                for i in self.child:
-                    i.print_tree(method)
+            for i in self.child:
+                i.print_tree(level)
 
 def build_management_tree():
-    # CTO Hierarchy
-    infra_head = TreeNode("Vishwa","Infrastructure Head")
-    infra_head.add_child(TreeNode("Dhaval","Cloud Manager"))
-    infra_head.add_child(TreeNode("Abhijit", "App Manager"))
+    # India Hierarchy
+    gujarat = TreeNode("Gujarat")
+    gujarat.add_child(TreeNode("Ahmedabad"))
+    gujarat.add_child(TreeNode("Baroda"))
 
-    cto = TreeNode("Chinmay", "CTO")
-    cto.add_child(infra_head)
-    cto.add_child(TreeNode("Aamir", "Application Head"))
+    karnataka = TreeNode("Karnataka")
+    karnataka.add_child(TreeNode("Banglore"))
+    karnataka.add_child(TreeNode("Mysore"))
 
-    # HR hierarchy
-    hr_head = TreeNode("Gels","HR Head")
+    india = TreeNode("India")
+    india.add_child(gujarat)
+    india.add_child(karnataka)
 
-    hr_head.add_child(TreeNode("Peter","Recruitment Manager"))
-    hr_head.add_child(TreeNode("Waqas", "Policy Manager"))
+    # USA hierarchy
+    new_jersey = TreeNode("New Jersey")
+    new_jersey.add_child(TreeNode("Princeton"))
+    new_jersey.add_child(TreeNode("Trenton"))
 
-    ceo = TreeNode("Nilupul", "CEO")
-    ceo.add_child(cto)
-    ceo.add_child(hr_head)
+    california = TreeNode("California")
+    california.add_child(TreeNode("San Francisco"))
+    california.add_child(TreeNode("Mountain view"))
+    california.add_child(TreeNode("Palo Alto"))
 
-    return ceo
+    usa = TreeNode("USA")
+    usa.add_child(new_jersey)
+    usa.add_child(california)
+
+    globals = TreeNode("Global")
+    globals.add_child(india)
+    globals.add_child(usa)
+
+    return globals
 
 if __name__ == '__main__':
     root_node = build_management_tree()
-    root_node.print_tree("both")
+    root_node.print_tree(3)
